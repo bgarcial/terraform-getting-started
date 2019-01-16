@@ -41,6 +41,21 @@ resource "aws_instance" "testing-terraform" {
   # Tells Terraform that this EC2 instance must be created only after the
   # S3 bucket has been created.
   depends_on = ["aws_s3_bucket.example"]
+
+  #  Now let's see how to use provisioners to initialize instances when they're created.
+  # If you're using an image-based infrastructure (perhaps with images created with Packer), 
+  # then what you've learned so far is good enough. But if you need to do some initial setup 
+  # on your instances, then provisioners let you upload files, run shell scripts, or install 
+  # and trigger other software like configuration management tools, etc.
+  
+  #Multiple provisioner blocks can be added to define multiple provisioning steps. 
+  # Terraform supports multiple provisioners, but for this example we are using 
+  # the local-exec provisioner. https://www.terraform.io/docs/provisioners/index.html
+  # The local-exec provisioner executes a command locally on the machine running Terraform.
+  # take the ip address
+  provisioner "local-exec" {
+    command = "echo ${aws_instance.testing-terraform.public_ip} > ip_address.txt"
+  }
 }
 
 

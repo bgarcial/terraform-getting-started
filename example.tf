@@ -1,8 +1,39 @@
 provider "aws" {
-  region     = "eu-central-1"
+  # This uses more interpolations, this time prefixed with var. . 
+  # This tells Terraform that you're accessing variables. 
+  # This configures the AWS provider with the given variables.
+  access_key = "${var.access_key}"
+  secret_key = "${var.secret_key}"
+  region     = "${var.region}"
+  #region     = "eu-central-1"
   # Regions 
   # https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.RegionsAndAvailabilityZones.html
 }
+
+#output "ami" {
+#  value = "${lookup(var.amis, var.region)}"
+#}
+
+# In the previous section, we introduced input variables as a way 
+# to parameterize Terraform configurations. In this page, we introduce 
+# output variables as a way to organize data to be easily queried and 
+# shown back to the Terraform user.
+
+# Let's define an output to show us the public IP address of the elastic IP address that we create
+# This defines an output variable named "ip". The name of the variable must conform to 
+# Terraform variable naming conventions if it is to be used as an input to other modules. 
+# The value field specifies what the value will be, and almost always contains one or more 
+# interpolations, since the output data is typically dynamic. 
+# In this case, we're outputting the public_ip attribute of the elastic IP address.
+
+# Multiple output blocks can be defined to specify multiple output variables.
+#output "ip" {
+#  value = "${aws_eip.ip.public_ip}"
+# }
+
+
+
+
 
 # Sometimes there are dependencies between resources that are not visible to Terraform. 
 # The depends_on argument is accepted by any resource and accepts a list of resources to 
@@ -28,6 +59,10 @@ resource "aws_s3_bucket" "example" {
 
 resource "aws_instance" "testing-terraform" {
   ami           = "ami-d15d663a"
+  
+  # ami           = "${lookup(var.amis, var.region)}"
+  # Are configured on variables.tf
+
   # How to select and AMI. Is necessary select an AMI according to the region of the provider
   # I need select and AMI of eu-central-1 y aca dicen como hacerlo
   # https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/finding-an-ami.html 

@@ -120,3 +120,11 @@ resource "aws_instance" "example" {
   instance_type = "t2.micro"
 }
 ```
+
+# MODULES
+
+Up to this point, we've been configuring Terraform by editing Terraform configurations directly. As our infrastructure grows, this practice has a few key problems: a lack of organization, a lack of reusability, and difficulties in management for teams.
+
+Modules in Terraform are self-contained packages of Terraform configurations that are managed as a group. Modules are used to create reusable components, improve organization, and to treat pieces of infrastructure as a black box.
+
+This section of the getting started will cover the basics of using modules. Writing modules is covered in more detail in the [modules documentation](https://www.terraform.io/docs/modules/index.html).

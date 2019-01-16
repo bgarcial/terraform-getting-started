@@ -6,7 +6,7 @@ provider "aws" {
 
 
 resource "aws_instance" "testing-terraform" {
-  ami           = "ami-b2665059"
+  ami           = "ami-d15d663a"
   # How to select and AMI. Is necessary select an AMI according to the region of the provider
   # I need select and AMI of eu-central-1 y aca dicen como hacerlo
   # https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/finding-an-ami.html 
@@ -24,12 +24,16 @@ resource "aws_instance" "testing-terraform" {
 
 
 # assigning an elastic IP to the EC2 instance we're managing
-#resource "aws_eip" "aws_instance" {
-  #instance = "${aws_instance.iaascode-terraform.id}"
+resource "aws_eip" "aws_instance" {
+  instance = "${aws_instance.testing-terraform.id}"
+  # The only parameter for aws_eip is "instance" which is 
+  # the EC2 instance to assign the IP to. For this value, we 
+  # use an interpolation to use an attribute from the EC2 instance we 
+  # managed earlier. 
   # Read about of implicit and explicit dependencies
   # https://learn.hashicorp.com/terraform/getting-started/dependencies#implicit-and-explicit-dependencies
   # AWS Instance should be created before that aws_eip
-#}
+}
 
 # Sometimes there are dependencies between resources that are not visible to Terraform. 
 # The depends_on argument is accepted by any resource and accepts a list of resources to 
